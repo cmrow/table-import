@@ -1,0 +1,19 @@
+<table>
+            <thead>
+                <tr>
+                    <th>PIID</th>
+                    <th>PIDesc</th>
+                    <th>PIDirectorio</th>
+                    <th>PIProcValEstructura</th>
+                    <th>PIProcValDatos</th>
+                    <th>PIProcInsercion</th>
+                    <th>PIUrlFormato</th>
+                    <th>PIDescProc</th>
+                    <th>PIActiva</th>
+                    <th>PIReversion</th>
+                    <th>Opciones</th>
+                </tr>
+            </thead>
+            <tbody>
+            <t/body>
+        </table>
