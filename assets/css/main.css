@@ -1,0 +1,18 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+:root{
+    --bg_soft: #EAEDF8;
+    --grey_thead: #4A5863;
+    --grey_line: #B4B4B4;
+}
+body{
+    background-color: var(--bg_soft);
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+.heading{
+    padding: 2em;
+    color: var(--grey_thead);
+}
