@@ -1,15 +1,16 @@
-function readSrc(url) {
+function readSrc(url, callback) {
     const xhr = new XMLHttpRequest();
-    xhr.open("GET", url, true);
     xhr.responseType = "json";
-    xhr.onreadystatechange = function(e){
+    xhr.open("GET", url, true);
+    xhr.onreadystatechange = function (e) {
         if (xhr.readyState === 4 && xhr.status === 200) {
-            let result = xhr.response;
-            return result;     
+            debugger
+
+            // let result = xhr.response;
+            callback(xhr.response);
         }
+        console.log(xhr.status);
     };
     xhr.send();
-    xhr.onerror = function (e) {
-        console.log(`error ${xhr.status} event : ${e}`)
-    }
+
 }

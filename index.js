@@ -1,14 +1,18 @@
-//recibir parametros json-data
-readSrc(this, this._url)
-    .then(data => {
-        this._root.innerHTML = `${JSON.stringify(data[0])}`
-        console.log(JSON.stringify(data[0]));
-    });
-
-
-const tabla = new TablaImportaciones();
-
 const divapp = document.getElementById('app');
-// tabla.url= "js/json/datos.API.json";
-tabla.id = 'tablaImportaciones';
-divapp.appendChild(tabla);
+let el = null;
+const comp_importaciones = document.createElement('comp-importaciones');
+const objImport = {
+    url: 'json/datos.API.json',
+    title: 'Todas las importaciones'
+}
+
+let objComp = new ComponenteImportaciones();
+objComp.setAttribute('titulo', objImport.title);
+objComp.setAttribute('url', objImport.url);
+objComp.setAttribute('id', 'el1');
+
+window.addEventListener('load', () => {
+    console.log('window.onload');
+    divapp.appendChild(objComp);
+    el = document.getElementById('el1');
+})
