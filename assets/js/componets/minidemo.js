@@ -51,6 +51,7 @@ class ComponenteImportaciones extends HTMLElement {
         }
         tbody {
             background-color: var(--grey_bg);
+            color: #38383A;
         }
         .contenedor-componente {
             font-family: Verdana, Geneva, Tahoma, sans-serif;
@@ -188,10 +189,10 @@ class ComponenteImportaciones extends HTMLElement {
                         td.appendChild(ipt);
                         _tr.appendChild(td);
                     } else {
-                        let prop = p;
-                        let txt = data[index];
+                        let cols = data[index];
                         let td = document.createElement('td');
-                        td.textContent = txt[p];
+                        let txt = cols[p];
+                        td.textContent = ((txt === null || txt === "") ? 'null' : txt)
                         _tr.appendChild(td)
                     }
                 })

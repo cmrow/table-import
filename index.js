@@ -2,11 +2,12 @@ const divapp = document.getElementById('app');
 let el = null;
 const comp_importaciones = document.createElement('comp-importaciones');
 const objImport = {
-    url: 'json/datos.API2.json',
+    url: 'json/datos.API.json',
     title: 'Todas las importaciones'
 }
 
 let objComp = new ComponenteImportaciones();
+let componente = document.createElement('comp-importaciones');
 objComp.setAttribute('titulo', objImport.title);
 objComp.setAttribute('url', objImport.url);
 objComp.setAttribute('id', 'el1');
