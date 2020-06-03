@@ -59,9 +59,10 @@ tbody {
     display: flex;
     flex-direction: column;
     background-color: var(--white);
-    font-size: small;
+    font-size: smaller;
     margin: 1em;
     border: solid var(--grey_thead) 1px;
+    
 }
 
 .botons {
