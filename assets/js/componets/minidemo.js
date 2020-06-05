@@ -9,8 +9,11 @@ class ComponenteImportaciones extends HTMLElement {
         this._titulo = '';
         this._$title = "";
         this._$container = "";
-        this._$selected = "";
-        this._$section_tabla = "";
+        this._selected = "";
+        // this._$section_tabla = "";
+        this._$thead = null;
+        this._$tbody = null;
+
         //  "js/json/datos.API.json";
     }
     connectedCallback() {
@@ -70,6 +73,10 @@ class ComponenteImportaciones extends HTMLElement {
             border: 1px;
             background: var(--grey_thead);
             border-style: inset;
+        }
+        input.check-row{
+            height:2em;
+
         }
         .btn-accion {
             display: flex;
@@ -140,27 +147,39 @@ class ComponenteImportaciones extends HTMLElement {
                 </div>
             </div>
         </header>
-        <section class="tabla">
-
-        </section>
+            <table>
+            <thead>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
     </div>
     `;
         this._$title = this._root.querySelector('.title');
-        this._$section_tabla = this._root.querySelector('.tabla');
+        this._$section_tabla = this._root.querySelector('table');
+        this._$thead = this._root.querySelector('thead');
+        this._$tbody = this._root.querySelector('tbody');
+
         this._setTitle(this.getAttribute("titulo"));
         this._url = this.getAttribute("url");
-
         this._loadData();
+        this._$tbody.addEventListener('change', (e) => {
+            this._$tbody.querySelectorAll('input[type="checkbox"]')
+                .forEach(($ipt) => {
+                    if ($ipt === e.target) {
+                        this.selected = $ipt.dataset.id;
+                    }
+                })
+        })
+
         this._render();
     }
     _render() {
         if (this._data != null && this._data != '') {
             this._$title.innerHTML = this.getAttribute('titulo');
-            this._$section_tabla.innerHTML = "";
-            let tabla = document.createElement('table');
-            let thead = document.createElement('thead');
-            let tr = document.createElement('tr');
-            tr.classList.add('main-thead');
+            let trThead = document.createElement('tr');
+            trThead.classList.add('main-thead');
+            trThead.dataset.id = 'thead';
             const properties = this._data[0].propiedades;
             properties.forEach(p => {
                 if (p === "opcion") {
@@ -168,16 +187,15 @@ class ComponenteImportaciones extends HTMLElement {
                     let ipt = document.createElement('input');
                     ipt.setAttribute('type', 'checkbox');
                     th.appendChild(ipt);
-                    tr.appendChild(th);
+                    trThead.appendChild(th);
                 } else {
                     let th = document.createElement('th');
                     th.textContent = p
-                    tr.appendChild(th);
+                    trThead.appendChild(th);
                 }
+
             });
-            thead.appendChild(tr);
-            tabla.appendChild(thead);
-            let tbody = document.createElement('tbody');
+            this._$thead.appendChild(trThead);
             let data = this._data;
             for (let index = 1; index < data.length; index++) {
                 let _tr = document.createElement('tr');
@@ -186,6 +204,8 @@ class ComponenteImportaciones extends HTMLElement {
                         let td = document.createElement('td');
                         let ipt = document.createElement('input');
                         ipt.setAttribute('type', 'checkbox');
+                        ipt.dataset.id = data[index]["PIID"];
+                        ipt.classList.add('check-row');
                         td.appendChild(ipt);
                         _tr.appendChild(td);
                     } else {
@@ -196,10 +216,8 @@ class ComponenteImportaciones extends HTMLElement {
                         _tr.appendChild(td)
                     }
                 })
-                tbody.appendChild(_tr)
+                this._$tbody.appendChild(_tr);
             }
-            tabla.appendChild(tbody);
-            this._$section_tabla.appendChild(tabla);
         }
     }
     _setTitle(title) {
@@ -253,7 +271,25 @@ class ComponenteImportaciones extends HTMLElement {
     get data() {
         return this._data;
     }
+    set selected(index) {
+        const $ipts = this._$tbody.querySelectorAll('input[type ="checkbox"]');
+        if ($ipts !== null) {
+            $ipts.forEach($ipt => {
+                if ($ipt.dataset.id === index) {
+                    console.log($ipt.parentNode.parentNode);
+                    $ipt.parentNode.parentNode.classList.add('selected');
+                }else{
 
+                    $ipt.parentNode.parentNode.classList.remove("selected");
+                    $ipt.checked = false;
+                }
+            })
+            this._selected = index;
+        }
+    }
+    get selected() {
+        return this._selected;
+    }
 
 }
 
