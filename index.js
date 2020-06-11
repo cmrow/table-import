@@ -8,7 +8,7 @@ const objImport = {
 
 let objComp = new ComponenteImportaciones();
 let componente = document.createElement('comp-importaciones');
-objComp.setAttribute('titulo', objImport.title);
+objComp.setAttribute('heading', objImport.title);
 objComp.setAttribute('url', objImport.url);
 objComp.setAttribute('id', 'el1');
 

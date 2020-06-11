@@ -1,21 +1,60 @@
 class ComponenteImportaciones extends HTMLElement {
     constructor() {
         super();
-        //shadowroot
-        this._root = this.attachShadow({ mode: "open" });
         this._id = '';
         this._data = "";
         this._url = "";
-        this._titulo = '';
-        this._$title = "";
-        this._$container = "";
+        this._heading = '';
         this._selected = "";
-        // this._$section_tabla = "";
+        this._root = this.attachShadow({ mode: "open" });
+        this._$heading = "";
         this._$thead = null;
         this._$tbody = null;
-
-        //  "js/json/datos.API.json";
     }
+    set data(datos) {
+        if (this._data === datos) return;
+        this._data = datos;
+        this._render();
+    }
+    get data() {
+        return this._data;
+    }
+    set selected(index) {
+        const $ipts = this._$tbody.querySelectorAll('input[type ="checkbox"]');
+        if ($ipts !== null) {
+            $ipts.forEach($ipt => {
+                if ($ipt.dataset.id === index && $ipt.checked) {
+                    $ipt.parentNode.parentNode.classList.add('selected');
+                    this._selected = index;
+                } else {
+                    $ipt.parentNode.parentNode.classList.remove("selected");
+                    $ipt.checked = false;
+                    // this._selected = "";
+                }
+            })
+            console.log(this);
+        }
+    }
+    get selected() {
+        return this._selected;
+    }
+    set heading(title) {
+        if (title == this._heading) return;
+        this._heading = title;
+        this._render();
+    }
+    get heading() {
+        return this._heading;
+    }
+    set url(src) {
+        if (src == this._url) return;
+        this._url = src;
+        this._render();
+    }
+    get url() {
+        return this._url;
+    }
+
     connectedCallback() {
         this._root.innerHTML =
             `<style>
@@ -51,6 +90,13 @@ class ComponenteImportaciones extends HTMLElement {
         }
         tbody tr:hover {
             background-color: var(--green_soft);
+        }
+        input:checked {
+            border: 1px solid blue;
+          }
+        input[type="checkbox"]{
+            font-size: 21px;
+            transform: scale(1.2);
         }
         tbody {
             background-color: var(--grey_bg);
@@ -155,15 +201,14 @@ class ComponenteImportaciones extends HTMLElement {
         </table>
     </div>
     `;
-        this._$title = this._root.querySelector('.title');
-        this._$section_tabla = this._root.querySelector('table');
+        this._$heading = this._root.querySelector('.title');
         this._$thead = this._root.querySelector('thead');
         this._$tbody = this._root.querySelector('tbody');
 
-        this._setTitle(this.getAttribute("titulo"));
-        this._url = this.getAttribute("url");
+        this.heading = this.getAttribute("heading");
+        this.url = this.getAttribute("url");
         this._loadData();
-        this._$tbody.addEventListener('change', (e) => {
+        this._$tbody.addEventListener('click', (e) => {
             this._$tbody.querySelectorAll('input[type="checkbox"]')
                 .forEach(($ipt) => {
                     if ($ipt === e.target) {
@@ -175,8 +220,10 @@ class ComponenteImportaciones extends HTMLElement {
         this._render();
     }
     _render() {
+        if (this._heading !== "" && this.heading !== null) {
+            this._$heading.innerHTML = this.getAttribute('heading');
+        }
         if (this._data != null && this._data != '') {
-            this._$title.innerHTML = this.getAttribute('titulo');
             let trThead = document.createElement('tr');
             trThead.classList.add('main-thead');
             trThead.dataset.id = 'thead';
@@ -220,33 +267,18 @@ class ComponenteImportaciones extends HTMLElement {
             }
         }
     }
-    _setTitle(title) {
-        if (this._titulo === title) return;
-        this._titulo = title;
-        this._render();
-    }
-    _setUrl(url) {
-        if (this._url === url) return;
-        this._url = url;
-        this._render();
-    }
     _loadData() {
         readSrc(this, this._url)
             .then(data => {
-                this._setData(data);
+                this.data = data;
             }
             );
-    }
-    _setData(datos) {
-        if (this._data === datos) return;
-        this._data = datos;
-        this._render();
     }
     attibuteChangedCallback(name, oldValue, newValue) {
         if (oldValue !== newValue) {
             switch (name) {
-                case 'titulo':
-                    this._setTitle(newValue);
+                case 'heading':
+                    this._heading = (newValue !== null);
                     break;
                 case 'id':
                     this._id = (newValue !== null);
@@ -254,45 +286,15 @@ class ComponenteImportaciones extends HTMLElement {
                 case 'url':
                     break;
                 case 'data':
-                    this._data = this._setData(newValue)
+                    this._data = (newValue !== null);
                     break;
             }
         }
     }
     static get observedAttributes() {
-        return ['url', 'titulo', 'data'];
+        return ['url', 'heading', 'data'];
     }
-
-    set data(data) {
-        if (this._data === data) return;
-        this._data = data;
-        this._render();
-    }
-    get data() {
-        return this._data;
-    }
-    set selected(index) {
-        const $ipts = this._$tbody.querySelectorAll('input[type ="checkbox"]');
-        if ($ipts !== null) {
-            $ipts.forEach($ipt => {
-                if ($ipt.dataset.id === index) {
-                    console.log($ipt.parentNode.parentNode);
-                    $ipt.parentNode.parentNode.classList.add('selected');
-                }else{
-
-                    $ipt.parentNode.parentNode.classList.remove("selected");
-                    $ipt.checked = false;
-                }
-            })
-            this._selected = index;
-        }
-    }
-    get selected() {
-        return this._selected;
-    }
-
 }
-
 
 window.customElements.define("comp-importaciones", ComponenteImportaciones);
 
