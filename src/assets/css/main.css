@@ -1,0 +1,25 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+:root{
+    --bg_soft: #EAEDF8;
+    --grey_thead: #4A5863;
+    --blue_sinco: #0071BC;
+    --grey_line: #B4B4B4;
+    --grey_bg: #f8f8f8;
+    --bg_soft: #EAEDF8;
+    --bg_head: rgba(129, 152, 208, 0.34);
+    --green_soft: #EDF8E2;
+    --green_ok: #8FC73E;
+    --white: #FFFFFF;
+    
+}
+body{
+    background-color: var(--bg_soft);
+}
+.heading{
+    padding: 1em;
+    color: var(--grey_thead);
+}
