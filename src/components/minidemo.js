@@ -210,8 +210,11 @@ export default class ComponenteImportaciones extends HTMLElement {
 
         this.heading = this.getAttribute("heading");
         this.url = this.getAttribute("url");
+<<<<<<< HEAD:src/components/minidemo.js
         this.data = this.getAttribute("data");
         this._render();
+=======
+>>>>>>> a39a5838ebb196fe695b02f97726ddb6f15ac497:src/components/minidemo.js
         // this._loadData();
         this._$tbody.addEventListener('click', (e) => {
             this._$tbody.querySelectorAll('input[type="checkbox"]')

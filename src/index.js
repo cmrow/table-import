@@ -34,3 +34,13 @@ function datos() {
 
         })
 }
+        ajax(url2)
+            .subscribe(ajaxResponse => {
+                console.log(ajaxResponse);
+            })
+    })
+// const table = document.createElement('comp-importaciones');
+// table.setAttribute('url', '../json/datos.API.json')
+// app.appendChild(table);
+// console.log(app);
+
