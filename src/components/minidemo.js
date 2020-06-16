@@ -1,4 +1,7 @@
-class ComponenteImportaciones extends HTMLElement {
+import { Observable, from } from 'rxjs';
+import {ajax} from 'rxjs/ajax';
+import {readSrc} from './fetch';
+export default class ComponenteImportaciones extends HTMLElement {
     constructor() {
         super();
         this._id = '';
@@ -207,7 +210,9 @@ class ComponenteImportaciones extends HTMLElement {
 
         this.heading = this.getAttribute("heading");
         this.url = this.getAttribute("url");
-        this._loadData();
+        this.data = this.getAttribute("data");
+        this._render();
+        // this._loadData();
         this._$tbody.addEventListener('click', (e) => {
             this._$tbody.querySelectorAll('input[type="checkbox"]')
                 .forEach(($ipt) => {
@@ -216,6 +221,7 @@ class ComponenteImportaciones extends HTMLElement {
                     }
                 })
         })
+
 
         this._render();
     }
@@ -287,6 +293,7 @@ class ComponenteImportaciones extends HTMLElement {
                     break;
                 case 'data':
                     this._data = (newValue !== null);
+                    this._render();
                     break;
             }
         }
@@ -295,6 +302,7 @@ class ComponenteImportaciones extends HTMLElement {
         return ['url', 'heading', 'data'];
     }
 }
+
 
 window.customElements.define("comp-importaciones", ComponenteImportaciones);
 
