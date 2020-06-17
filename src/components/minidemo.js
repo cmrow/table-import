@@ -182,16 +182,16 @@ class ComponenteImportaciones extends HTMLElement {
             <h1 class="title"></h1>
             <div class="botons">
                 <div class="btn-accion" title="Auditoria">
-                    <img src="../assets/css/icons/auditoria.svg" alt="">
+                    <img src="assets/icons/auditoria.svg" alt="">
                 </div>
                 <div class="btn-accion" title="Editar">
-                    <img src="../assets/css/icons/edit.svg" alt="">
+                    <img src="assets/icons/edit.svg" alt="">
                 </div>
                 <div class="btn-accion" title="Borrar">
-                    <img src="../assets/css/icons/borrar.svg" alt="">
+                    <img src="assets/icons/borrar.svg" alt="">
                 </div>
                 <div class="btn-crear" title="Crear Importaciones">
-                    <img src="../assets/css/icons/plus.svg" alt="">
+                    <img src="assets/icons/plus.svg" alt="">
                     Crear importación
                 </div>
             </div>

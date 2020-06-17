@@ -2,7 +2,7 @@ const divapp = document.getElementById('app');
 let el = null;
 const comp_importaciones = document.createElement('comp-importaciones');
 const objImport = {
-    url: 'json/datos.API.json',
+    url: 'api/datos.json',
     title: 'Todas mis importaciones'
 }
 
