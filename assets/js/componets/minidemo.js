@@ -1,10 +1,13 @@
 class ComponenteImportaciones extends HTMLElement {
+    static get observedAttributes() {
+        return ['url', 'heading', 'data'];
+    }
     constructor() {
         super();
         this._id = '';
         this._data = "";
         this._url = "";
-        this._heading = '';
+        this.heading = '';
         this._selected = "";
         this._root = this.attachShadow({ mode: "open" });
         this._$heading = "";
@@ -38,14 +41,14 @@ class ComponenteImportaciones extends HTMLElement {
     get selected() {
         return this._selected;
     }
-    set heading(title) {
-        if (title == this._heading) return;
-        this._heading = title;
-        this._render();
-    }
-    get heading() {
-        return this._heading;
-    }
+    // set heading(title) {
+    //     if (title == this._heading) return;
+    //     this._heading = title;
+    //     this._render();
+    // }
+    // get heading() {
+    //     return this._heading;
+    // }
     set url(src) {
         if (src == this._url) return;
         this._url = src;
@@ -278,22 +281,23 @@ class ComponenteImportaciones extends HTMLElement {
         if (oldValue !== newValue) {
             switch (name) {
                 case 'heading':
-                    this._heading = (newValue !== null);
+                    // this._heading = (newValue !== null);
+                    this._render();
                     break;
                 case 'id':
                     this._id = (newValue !== null);
                     break;
                 case 'url':
+                    // this.url = newValue;
+                    this._render;
                     break;
                 case 'data':
-                    this._data = (newValue !== null);
+                    this._data = newValue ;
                     break;
             }
         }
     }
-    static get observedAttributes() {
-        return ['url', 'heading', 'data'];
-    }
+    
 }
 
 window.customElements.define("comp-importaciones", ComponenteImportaciones);
