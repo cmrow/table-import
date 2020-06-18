@@ -4,23 +4,15 @@ class ComponenteImportaciones extends HTMLElement {
     }
     constructor() {
         super();
-        this._id = '';
-        this._data = "";
-        this._url = "";
+        this.id = '';
+        this.data = "";
+        this.properties = "";
         this.heading = '';
         this._selected = "";
         this._root = this.attachShadow({ mode: "open" });
         this._$heading = "";
         this._$thead = null;
         this._$tbody = null;
-    }
-    set data(datos) {
-        if (this._data === datos) return;
-        this._data = datos;
-        this._render();
-    }
-    get data() {
-        return this._data;
     }
     set selected(index) {
         const $ipts = this._$tbody.querySelectorAll('input[type ="checkbox"]');
@@ -32,7 +24,6 @@ class ComponenteImportaciones extends HTMLElement {
                 } else {
                     $ipt.parentNode.parentNode.classList.remove("selected");
                     $ipt.checked = false;
-                    // this._selected = "";
                 }
             })
             console.log(this);
@@ -41,14 +32,6 @@ class ComponenteImportaciones extends HTMLElement {
     get selected() {
         return this._selected;
     }
-    // set heading(title) {
-    //     if (title == this._heading) return;
-    //     this._heading = title;
-    //     this._render();
-    // }
-    // get heading() {
-    //     return this._heading;
-    // }
     set url(src) {
         if (src == this._url) return;
         this._url = src;
@@ -208,9 +191,13 @@ class ComponenteImportaciones extends HTMLElement {
         this._$thead = this._root.querySelector('thead');
         this._$tbody = this._root.querySelector('tbody');
 
-        this.heading = this.getAttribute("heading");
-        this.url = this.getAttribute("url");
-        this._loadData();
+        // this.heading = this.getAttribute("heading");
+        this._$heading.textContent = this.heading;
+        // this.data = this.getAttribute("data");
+        this.properties = Object.keys(this.data[0]);
+        // debugger
+        console.log(this.properties);
+        // // this._loadData();
         this._$tbody.addEventListener('click', (e) => {
             this._$tbody.querySelectorAll('input[type="checkbox"]')
                 .forEach(($ipt) => {
@@ -223,15 +210,15 @@ class ComponenteImportaciones extends HTMLElement {
         this._render();
     }
     _render() {
-        if (this._heading !== "" && this.heading !== null) {
-            this._$heading.innerHTML = this.getAttribute('heading');
-        }
-        if (this._data != null && this._data != '') {
+        // if (this._heading !== "" && this.heading !== null) {
+
+        // } else 
+        if (this.data != null && this.data != '') {
             let trThead = document.createElement('tr');
             trThead.classList.add('main-thead');
             trThead.dataset.id = 'thead';
-            const properties = this._data[0].propiedades;
-            properties.forEach(p => {
+            // const properties = this._data[0].propiedades;
+            this.properties.forEach(p => {
                 if (p === "opcion") {
                     let th = document.createElement('th');
                     let ipt = document.createElement('input');
@@ -246,10 +233,10 @@ class ComponenteImportaciones extends HTMLElement {
 
             });
             this._$thead.appendChild(trThead);
-            let data = this._data;
+            let data = this.data;
             for (let index = 1; index < data.length; index++) {
                 let _tr = document.createElement('tr');
-                properties.forEach(p => {
+                this.properties.forEach(p => {
                     if (p === "opcion") {
                         let td = document.createElement('td');
                         let ipt = document.createElement('input');
@@ -270,13 +257,7 @@ class ComponenteImportaciones extends HTMLElement {
             }
         }
     }
-    _loadData() {
-        readSrc(this, this._url)
-            .then(data => {
-                this.data = data;
-            }
-            );
-    }
+  
     attibuteChangedCallback(name, oldValue, newValue) {
         if (oldValue !== newValue) {
             switch (name) {
@@ -285,19 +266,16 @@ class ComponenteImportaciones extends HTMLElement {
                     this._render();
                     break;
                 case 'id':
-                    this._id = (newValue !== null);
-                    break;
-                case 'url':
-                    // this.url = newValue;
-                    this._render;
+                    // this._id = (newValue !== null);
+                    this._render()
                     break;
                 case 'data':
-                    this._data = newValue ;
+                    this._render();
                     break;
             }
         }
     }
-    
+
 }
 
 window.customElements.define("comp-importaciones", ComponenteImportaciones);

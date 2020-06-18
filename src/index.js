@@ -1,19 +1,41 @@
 const divapp = document.getElementById('app');
+// debugger
+
 let el = null;
-const comp_importaciones = document.createElement('comp-importaciones');
-const objImport = {
-    url: 'api/datos.json',
-    title: 'Todas mis importaciones'
+const url = 'api/datos.json';
+const objToShow = {
+    title: 'Todas las importaciones',
+    data: null
 }
 
-let objComp = new ComponenteImportaciones();
-let componente = document.createElement('comp-importaciones');
-objComp.setAttribute('heading', objImport.title);
-objComp.setAttribute('url', objImport.url);
-objComp.setAttribute('id', 'el1');
- 
+function loadData(objToLoad, url) {
+    readSrc(objToLoad, url)
+        .then(data => {
+            objToLoad.data = data
+        })
+}
+loadData(objToShow, url);
+
+function createTable(obj) {
+    let tableComp = new ComponenteImportaciones();
+    // debugger
+    tableComp.heading = objToShow.title;
+    tableComp.id = 'el1';
+    //tableComp.setAttribute('heading', objToShow.title);
+    //tableComp.setAttribute('id', 'el1');
+    tableComp.data = objToShow.data;
+    console.log(tableComp.data);
+    return tableComp;
+}
+
+
 window.addEventListener('load', () => {
-    console.log('window.onload');
-    divapp.appendChild(objComp);
-    el = document.getElementById('el1');
+    if (objToShow.data !== null) {
+        el = createTable(objToShow);
+        console.log(el);
+        divapp.appendChild(el);
+        el = document.getElementById('el1');
+    }
+
 })
+// console.log(objToShow);
