@@ -9,7 +9,8 @@
         "PIUrlFormato": "NovedadesContraPrima.xlsx",
         "PIDescProc": "Importación de novedades contra prima",
         "PIActiva": "0",
-        "PIReversion": null
+        "PIReversion": null,
+        "opcion": ""
     },
     {
         "PIID": "2",
@@ -21,7 +22,8 @@
         "PIUrlFormato": "HistoricosNovSegInt.xls",
         "PIDescProc": "Importación de Historicos de Seguridad Social",
         "PIActiva": "0",
-        "PIReversion": null
+        "PIReversion": null,
+        "opcion": ""
     },
     {
         "PIID": "3",
@@ -33,7 +35,8 @@
         "PIUrlFormato": null,
         "PIDescProc": null,
         "PIActiva": "0",
-        "PIReversion": null
+        "PIReversion": null,
+        "opcion": ""
     },
     {
         "PIID": "6",
@@ -45,7 +48,8 @@
         "PIUrlFormato": null,
         "PIDescProc": null,
         "PIActiva": "0",
-        "PIReversion": null
+        "PIReversion": null,
+        "opcion": ""
     },
     {
         "PIID": "8",
@@ -57,6 +61,7 @@
         "PIUrlFormato": "NOVEDADES",
         "PIDescProc": "Importacion de novedades de nomina",
         "PIActiva": "0",
-        "PIReversion": null
+        "PIReversion": null,
+        "opcion": ""
     }
 ]

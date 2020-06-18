@@ -1,5 +1,5 @@
 const divapp = document.getElementById('app');
-// debugger
+debugger
 
 let el = null;
 const url = 'api/datos.json';
@@ -16,6 +16,7 @@ function loadData(objToLoad, url) {
 }
 loadData(objToShow, url);
 
+
 function createTable(obj) {
     let tableComp = new ComponenteImportaciones();
     // debugger
@@ -30,6 +31,7 @@ function createTable(obj) {
 
 
 window.addEventListener('load', () => {
+
     if (objToShow.data !== null) {
         el = createTable(objToShow);
         console.log(el);

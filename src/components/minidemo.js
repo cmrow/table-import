@@ -6,7 +6,7 @@ class ComponenteImportaciones extends HTMLElement {
         super();
         this.id = '';
         this.data = "";
-        this.properties = "";
+        this.columns = "";
         this.heading = '';
         this._selected = "";
         this._root = this.attachShadow({ mode: "open" });
@@ -32,15 +32,6 @@ class ComponenteImportaciones extends HTMLElement {
     get selected() {
         return this._selected;
     }
-    set url(src) {
-        if (src == this._url) return;
-        this._url = src;
-        this._render();
-    }
-    get url() {
-        return this._url;
-    }
-
     connectedCallback() {
         this._root.innerHTML =
             `<style>
@@ -194,9 +185,9 @@ class ComponenteImportaciones extends HTMLElement {
         // this.heading = this.getAttribute("heading");
         this._$heading.textContent = this.heading;
         // this.data = this.getAttribute("data");
-        this.properties = Object.keys(this.data[0]);
+        this.columns = Object.keys(this.data[0]);
         // debugger
-        console.log(this.properties);
+        console.log(this.columns);
         // // this._loadData();
         this._$tbody.addEventListener('click', (e) => {
             this._$tbody.querySelectorAll('input[type="checkbox"]')
@@ -209,34 +200,33 @@ class ComponenteImportaciones extends HTMLElement {
 
         this._render();
     }
+    _makeThead() {
+        let trThead = document.createElement('tr');
+        trThead.classList.add('main-thead');
+        this.columns.forEach(p => {
+            if (p === "opcion") {
+                let th = document.createElement('th');
+                let ipt = document.createElement('input');
+                ipt.setAttribute('type', 'checkbox');
+                th.appendChild(ipt);
+                trThead.appendChild(th);
+            } else {
+                let th = document.createElement('th');
+                th.textContent = p
+                trThead.appendChild(th);
+            }
+
+        });
+        return trThead;
+    }
     _render() {
-        // if (this._heading !== "" && this.heading !== null) {
-
-        // } else 
         if (this.data != null && this.data != '') {
-            let trThead = document.createElement('tr');
-            trThead.classList.add('main-thead');
-            trThead.dataset.id = 'thead';
-            // const properties = this._data[0].propiedades;
-            this.properties.forEach(p => {
-                if (p === "opcion") {
-                    let th = document.createElement('th');
-                    let ipt = document.createElement('input');
-                    ipt.setAttribute('type', 'checkbox');
-                    th.appendChild(ipt);
-                    trThead.appendChild(th);
-                } else {
-                    let th = document.createElement('th');
-                    th.textContent = p
-                    trThead.appendChild(th);
-                }
 
-            });
-            this._$thead.appendChild(trThead);
+            this._$thead.appendChild(this._makeThead());
             let data = this.data;
             for (let index = 1; index < data.length; index++) {
                 let _tr = document.createElement('tr');
-                this.properties.forEach(p => {
+                this.columns.forEach(p => {
                     if (p === "opcion") {
                         let td = document.createElement('td');
                         let ipt = document.createElement('input');
@@ -257,16 +247,14 @@ class ComponenteImportaciones extends HTMLElement {
             }
         }
     }
-  
+
     attibuteChangedCallback(name, oldValue, newValue) {
         if (oldValue !== newValue) {
             switch (name) {
                 case 'heading':
-                    // this._heading = (newValue !== null);
                     this._render();
                     break;
                 case 'id':
-                    // this._id = (newValue !== null);
                     this._render()
                     break;
                 case 'data':
@@ -274,6 +262,9 @@ class ComponenteImportaciones extends HTMLElement {
                     break;
             }
         }
+    }
+    disconnectedCallback() {
+        console.log('Custom square element removed from page.');
     }
 
 }
