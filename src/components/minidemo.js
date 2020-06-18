@@ -1,19 +1,19 @@
-class ComponenteImportaciones extends HTMLElement {
+class TableComponent extends HTMLElement {
     static get observedAttributes() {
-        return ['url', 'heading', 'data'];
+        return ['id', 'heading', 'data'];
     }
     constructor() {
         super();
-        this.id = '';
         this.data = "";
-        this.columns = "";
         this.heading = '';
+        this._columns = "";
         this._selected = "";
         this._root = this.attachShadow({ mode: "open" });
         this._$heading = "";
         this._$thead = null;
         this._$tbody = null;
     }
+ 
     set selected(index) {
         const $ipts = this._$tbody.querySelectorAll('input[type ="checkbox"]');
         if ($ipts !== null) {
@@ -32,6 +32,24 @@ class ComponenteImportaciones extends HTMLElement {
     get selected() {
         return this._selected;
     }
+    attibuteChangedCallback(name, oldValue, newValue) {
+        debugger
+        if (oldValue !== newValue) {
+            switch (name) {
+                case 'heading':
+                    // this._$heading.textContent = this.getAttribute("heading");
+                    this._render();
+                    break;
+                case 'id':
+                    this._render()
+                    break;
+                case 'data':
+                    this._render();
+                    break;
+            }
+        }
+    }
+   
     connectedCallback() {
         this._root.innerHTML =
             `<style>
@@ -40,6 +58,8 @@ class ComponenteImportaciones extends HTMLElement {
             margin: 0px;
             border-bottom: 0px;
             width: 100%;
+            table-layout: auto;
+            empty-cells: unset;
         }
         th {
             height: 1em;
@@ -58,8 +78,9 @@ class ComponenteImportaciones extends HTMLElement {
         }
         tr > td {
             border: 1px solid var(--grey_line);
-            padding: 2px;
+            padding: 0px;
             text-align: center;
+            height:auto;
             min-height: 2em;
         }
         .selected {
@@ -87,6 +108,7 @@ class ComponenteImportaciones extends HTMLElement {
             font-size: smaller;
             margin: 1em;
             border: solid var(--grey_thead) 1px;
+            max-width: 100%;
         }
         .botons {
             display: flex;
@@ -98,7 +120,7 @@ class ComponenteImportaciones extends HTMLElement {
             border-style: inset;
         }
         input.check-row{
-            height:2em;
+            height:auto;
 
         }
         .btn-accion {
@@ -181,14 +203,6 @@ class ComponenteImportaciones extends HTMLElement {
         this._$heading = this._root.querySelector('.title');
         this._$thead = this._root.querySelector('thead');
         this._$tbody = this._root.querySelector('tbody');
-
-        // this.heading = this.getAttribute("heading");
-        this._$heading.textContent = this.heading;
-        // this.data = this.getAttribute("data");
-        this.columns = Object.keys(this.data[0]);
-        // debugger
-        console.log(this.columns);
-        // // this._loadData();
         this._$tbody.addEventListener('click', (e) => {
             this._$tbody.querySelectorAll('input[type="checkbox"]')
                 .forEach(($ipt) => {
@@ -203,7 +217,7 @@ class ComponenteImportaciones extends HTMLElement {
     _makeThead() {
         let trThead = document.createElement('tr');
         trThead.classList.add('main-thead');
-        this.columns.forEach(p => {
+        this._columns.forEach(p => {
             if (p === "opcion") {
                 let th = document.createElement('th');
                 let ipt = document.createElement('input');
@@ -220,13 +234,15 @@ class ComponenteImportaciones extends HTMLElement {
         return trThead;
     }
     _render() {
-        if (this.data != null && this.data != '') {
+        this._$heading.textContent = this.heading;
 
+        if (this.data != null && this.data != '') {
+            this._columns = Object.keys(this.data[0]);
             this._$thead.appendChild(this._makeThead());
             let data = this.data;
             for (let index = 1; index < data.length; index++) {
                 let _tr = document.createElement('tr');
-                this.columns.forEach(p => {
+                this._columns.forEach(p => {
                     if (p === "opcion") {
                         let td = document.createElement('td');
                         let ipt = document.createElement('input');
@@ -246,28 +262,15 @@ class ComponenteImportaciones extends HTMLElement {
                 this._$tbody.appendChild(_tr);
             }
         }
+
     }
 
-    attibuteChangedCallback(name, oldValue, newValue) {
-        if (oldValue !== newValue) {
-            switch (name) {
-                case 'heading':
-                    this._render();
-                    break;
-                case 'id':
-                    this._render()
-                    break;
-                case 'data':
-                    this._render();
-                    break;
-            }
-        }
-    }
+ 
     disconnectedCallback() {
         console.log('Custom square element removed from page.');
     }
 
 }
 
-window.customElements.define("comp-importaciones", ComponenteImportaciones);
+window.customElements.define("table-component", TableComponent);
 
