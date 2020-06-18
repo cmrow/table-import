@@ -1,4 +1,4 @@
-function readSrc(el, url) {
+function readSrc(url) {
     var fetchHeaders = new Headers({
         Accept: 'application/json'
     });

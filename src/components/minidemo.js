@@ -1,58 +1,43 @@
 class TableComponent extends HTMLElement {
-    static get observedAttributes() {
-        return ['id', 'heading', 'data'];
-    }
-    constructor() {
-        super();
-        this.data = "";
-        this.heading = '';
-        this._columns = "";
-        this._selected = "";
-        this._root = this.attachShadow({ mode: "open" });
-        this._$heading = "";
-        this._$thead = null;
-        this._$tbody = null;
-    }
- 
-    set selected(index) {
-        const $ipts = this._$tbody.querySelectorAll('input[type ="checkbox"]');
-        if ($ipts !== null) {
-            $ipts.forEach($ipt => {
-                if ($ipt.dataset.id === index && $ipt.checked) {
-                    $ipt.parentNode.parentNode.classList.add('selected');
-                    this._selected = index;
-                } else {
-                    $ipt.parentNode.parentNode.classList.remove("selected");
-                    $ipt.checked = false;
-                }
-            })
-            console.log(this);
-        }
-    }
-    get selected() {
-        return this._selected;
-    }
-    attibuteChangedCallback(name, oldValue, newValue) {
-        debugger
-        if (oldValue !== newValue) {
-            switch (name) {
-                case 'heading':
-                    // this._$heading.textContent = this.getAttribute("heading");
-                    this._render();
-                    break;
-                case 'id':
-                    this._render()
-                    break;
-                case 'data':
-                    this._render();
-                    break;
-            }
-        }
-    }
-   
-    connectedCallback() {
-        this._root.innerHTML =
-            `<style>
+  static get observedAttributes() {
+    return ['id', 'heading'];
+  }
+
+  get data() {
+    return this._data;
+  }
+
+  set data(newData) {
+    this.setData(newData);
+  }
+
+  constructor() {
+    super();
+    this._root = this.attachShadow({ mode: "open" });
+    this.construirElementosHTML();
+    this.inicializarVariables();
+  }
+
+  setData(data) {
+    this._data = data;
+    this._render();
+  }
+
+  inicializarVariables() {
+    this._selected = '';
+    this.heading = '';
+
+    this._data = [];
+    this._columns = [];
+
+    this._$heading = this._root.querySelector('.title');
+    this._$thead = this._root.querySelector('thead');
+    this._$tbody = this._root.querySelector('tbody');
+  }
+
+  construirElementosHTML() {
+    this._root.innerHTML =
+      `<style>
         table {
             border-collapse: collapse;
             margin: 0px;
@@ -113,7 +98,7 @@ class TableComponent extends HTMLElement {
         .botons {
             display: flex;
         }
-        
+
         .btn-crear:hover {
             border: 1px;
             background: var(--grey_thead);
@@ -200,77 +185,93 @@ class TableComponent extends HTMLElement {
         </table>
     </div>
     `;
-        this._$heading = this._root.querySelector('.title');
-        this._$thead = this._root.querySelector('thead');
-        this._$tbody = this._root.querySelector('tbody');
-        this._$tbody.addEventListener('click', (e) => {
-            this._$tbody.querySelectorAll('input[type="checkbox"]')
-                .forEach(($ipt) => {
-                    if ($ipt === e.target) {
-                        this.selected = $ipt.dataset.id;
-                    }
-                })
-        })
+  }
 
-        this._render();
-    }
-    _makeThead() {
-        let trThead = document.createElement('tr');
-        trThead.classList.add('main-thead');
-        this._columns.forEach(p => {
-            if (p === "opcion") {
-                let th = document.createElement('th');
-                let ipt = document.createElement('input');
-                ipt.setAttribute('type', 'checkbox');
-                th.appendChild(ipt);
-                trThead.appendChild(th);
-            } else {
-                let th = document.createElement('th');
-                th.textContent = p
-                trThead.appendChild(th);
-            }
-
-        });
-        return trThead;
-    }
-    _render() {
-        this._$heading.textContent = this.heading;
-
-        if (this.data != null && this.data != '') {
-            this._columns = Object.keys(this.data[0]);
-            this._$thead.appendChild(this._makeThead());
-            let data = this.data;
-            for (let index = 1; index < data.length; index++) {
-                let _tr = document.createElement('tr');
-                this._columns.forEach(p => {
-                    if (p === "opcion") {
-                        let td = document.createElement('td');
-                        let ipt = document.createElement('input');
-                        ipt.setAttribute('type', 'checkbox');
-                        ipt.dataset.id = data[index]["PIID"];
-                        ipt.classList.add('check-row');
-                        td.appendChild(ipt);
-                        _tr.appendChild(td);
-                    } else {
-                        let cols = data[index];
-                        let td = document.createElement('td');
-                        let txt = cols[p];
-                        td.textContent = ((txt === null || txt === "") ? 'null' : txt)
-                        _tr.appendChild(td)
-                    }
-                })
-                this._$tbody.appendChild(_tr);
-            }
+  set selected(index) {
+    const $ipts = this._$tbody.querySelectorAll('input[type ="checkbox"]');
+    if ($ipts !== null) {
+      $ipts.forEach($ipt => {
+        if ($ipt.dataset.id === index && $ipt.checked) {
+          $ipt.parentNode.parentNode.classList.add('selected');
+          this._selected = index;
+        } else {
+          $ipt.parentNode.parentNode.classList.remove("selected");
+          $ipt.checked = false;
         }
+      });
+    }
+  }
 
+  get selected() {
+    return this._selected;
+  }
+
+  attributeChangedCallback() {
+    this._render();
+  }
+
+  _makeThead() {
+    let trThead = document.createElement('tr');
+    trThead.classList.add('main-thead');
+    this._columns.forEach(p => {
+      if (p === "opcion") {
+        let th = document.createElement('th');
+        let ipt = document.createElement('input');
+        ipt.setAttribute('type', 'checkbox');
+        th.appendChild(ipt);
+        trThead.appendChild(th);
+      } else {
+        let th = document.createElement('th');
+        th.textContent = p
+        trThead.appendChild(th);
+      }
+
+    });
+    return trThead;
+  }
+
+  _render() {
+    this._$heading.textContent = this.heading || this.getAttribute('heading');
+
+    if (this.data !== null && this.data !== '') {
+      this._columns = Object.keys(this.data[0]);
+      this._$thead.appendChild(this._makeThead());
+      let data = this.data;
+      for (let index = 1; index < data.length; index++) {
+        let _tr = document.createElement('tr');
+
+        _tr.addEventListener('click', (e) => {
+          _tr.querySelector('input').checked = true;
+        });
+
+        this._columns.forEach(p => {
+          if (p === "opcion") {
+            let td = document.createElement('td');
+            let ipt = document.createElement('input');
+            ipt.setAttribute('type', 'checkbox');
+            ipt.dataset.id = data[index]["PIID"];
+            ipt.classList.add('check-row');
+            td.appendChild(ipt);
+            _tr.appendChild(td);
+          } else {
+            let cols = data[index];
+            let td = document.createElement('td');
+            let txt = cols[p];
+            td.textContent = ((txt === null || txt === "") ? 'null' : txt)
+            _tr.appendChild(td)
+          }
+        })
+        this._$tbody.appendChild(_tr);
+      }
     }
 
- 
-    disconnectedCallback() {
-        console.log('Custom square element removed from page.');
-    }
+  }
+
+
+  disconnectedCallback() {
+    console.log('Custom square element removed from page.');
+  }
 
 }
 
 window.customElements.define("table-component", TableComponent);
-

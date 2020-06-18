@@ -1,38 +1,16 @@
-const divapp = document.getElementById('app');
-debugger
-const urlData = 'api/datos.json';
+window.addEventListener('load', async () => {
+  const divapp = document.getElementById('app');
+  const tabla = document.getElementById('el2');
 
-const objToShow = {
-    title: 'Todas las importaciones',
-    data: null
+  const data = await readSrc('api/datos.json');
+
+  tabla.data = data;
+  divapp.appendChild(createTable('Todas las importaciones', data));
+});
+
+function createTable(title, data) {
+  let tableComp = new TableComponent();
+  tableComp.heading = title;
+  tableComp.data = data;
+  return tableComp;
 }
-
-const loadData = (objToLoad, url) => {
-    readSrc(objToLoad, url)
-        .then(data => {
-            objToLoad.data = data
-        })
-}
-loadData(objToShow, urlData);
-
-
-function createTable(obj) {
-    let tableComp = new TableComponent();
-    // debugger
-    tableComp.heading = objToShow.title;
-    tableComp.id = 'el1';
-    tableComp.data = objToShow.data;
-    console.log(tableComp.data);
-    return tableComp;
-}
-
-
-window.addEventListener('load', () => {
-
-    if (objToShow.data !== null) {
-        el = createTable(objToShow);
-        // console.log(el);
-        divapp.appendChild(el);
-    } 
-})
-// console.log(objToShow);
