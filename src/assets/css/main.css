@@ -2,6 +2,8 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+    max-width: -moz-fit-content;
+    max-width: -webkit-fit-content;
 }
 :root{
     --bg_soft: #EAEDF8;
@@ -18,6 +20,7 @@
 }
 body{
     background-color: var(--bg_soft);
+    max-width: 200%;
 }
 .heading{
     padding: 1em;

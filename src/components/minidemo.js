@@ -46,6 +46,9 @@ class TableComponent extends HTMLElement {
             table-layout: auto;
             empty-cells: unset;
         }
+        tbody>tr{
+          cursor:pointer
+        }
         th {
             height: 1em;
             border-right: var(--white) solid 1px;
@@ -86,6 +89,7 @@ class TableComponent extends HTMLElement {
             color: #38383A;
         }
         .contenedor-componente {
+          
             font-family: Verdana, Geneva, Tahoma, sans-serif;
             display: flex;
             flex-direction: column;
@@ -93,8 +97,12 @@ class TableComponent extends HTMLElement {
             font-size: smaller;
             margin: 1em;
             border: solid var(--grey_thead) 1px;
-            max-width: 100%;
-        }
+            width: 130%;
+            /*
+            fill-available;
+            width:
+            */
+          }
         .botons {
             display: flex;
         }
@@ -136,8 +144,11 @@ class TableComponent extends HTMLElement {
             align-items: center;
             padding: 1em;
             color: var(--grey_thead);
-            /* border-bottom: solid 2px; */
-            /* border-color: var(--grey_line); */
+            /* 
+              border-bottom: solid 2px;
+              width:100%;
+            */
+            border-color: var(--grey_line); 
         }
         .title {
             font-size: 2rem;
@@ -188,85 +199,109 @@ class TableComponent extends HTMLElement {
   }
 
   set selected(index) {
-    const $ipts = this._$tbody.querySelectorAll('input[type ="checkbox"]');
-    if ($ipts !== null) {
-      $ipts.forEach($ipt => {
-        if ($ipt.dataset.id === index && $ipt.checked) {
-          $ipt.parentNode.parentNode.classList.add('selected');
-          this._selected = index;
-        } else {
-          $ipt.parentNode.parentNode.classList.remove("selected");
-          $ipt.checked = false;
-        }
-      });
-    }
+    const filas = this._root.querySelectorAll('tr.fila');
+    filas.forEach(fila => {
+      if (fila.dataset.id === index) {
+        this._selectFila(fila);
+        this._selected = index;
+        return
+      }
+      fila.classList.remove("selected");
+      fila.lastChild.firstElementChild.checked = false;
+    });
   }
 
   get selected() {
     return this._selected;
   }
 
-  attributeChangedCallback() {
-    this._render();
+  _selectFila(fila) {
+    fila.classList.add('selected');
+    fila.lastChild.firstElementChild.checked = true;
   }
 
-  _makeThead() {
-    let trThead = document.createElement('tr');
-    trThead.classList.add('main-thead');
-    this._columns.forEach(p => {
-      if (p === "opcion") {
-        let th = document.createElement('th');
-        let ipt = document.createElement('input');
-        ipt.setAttribute('type', 'checkbox');
-        th.appendChild(ipt);
-        trThead.appendChild(th);
-      } else {
-        let th = document.createElement('th');
-        th.textContent = p
-        trThead.appendChild(th);
-      }
-
-    });
-    return trThead;
+  attributeChangedCallback() {
+    this._render();
   }
 
   _render() {
     this._$heading.textContent = this.heading || this.getAttribute('heading');
 
-    if (this.data !== null && this.data !== '') {
+    if (this.data.length !== 0) {
       this._columns = Object.keys(this.data[0]);
-      this._$thead.appendChild(this._makeThead());
-      let data = this.data;
-      for (let index = 1; index < data.length; index++) {
-        let _tr = document.createElement('tr');
-
-        _tr.addEventListener('click', (e) => {
-          _tr.querySelector('input').checked = true;
-        });
-
-        this._columns.forEach(p => {
-          if (p === "opcion") {
-            let td = document.createElement('td');
-            let ipt = document.createElement('input');
-            ipt.setAttribute('type', 'checkbox');
-            ipt.dataset.id = data[index]["PIID"];
-            ipt.classList.add('check-row');
-            td.appendChild(ipt);
-            _tr.appendChild(td);
-          } else {
-            let cols = data[index];
-            let td = document.createElement('td');
-            let txt = cols[p];
-            td.textContent = ((txt === null || txt === "") ? 'null' : txt)
-            _tr.appendChild(td)
-          }
-        })
-        this._$tbody.appendChild(_tr);
-      }
+      this._$thead.appendChild(this._construirThead());
+      this.data.forEach(dato => {
+        this._$tbody.appendChild(this._construirFila(dato));
+      })
+      this._agregarEventos();
     }
-
   }
 
+  _construirThead() {
+    const trThead = document.createElement('tr');
+    trThead.classList.add('main-thead');
+    this._columns.forEach(p => {
+      trThead.appendChild(this._construirColumna(p));
+    });
+    trThead.appendChild(this._construirColumCheck());
+    return trThead;
+  }
+
+  _construirColumna(text) {
+    let column = document.createElement('th');
+    column.textContent = text;
+    return column;
+  }
+
+  _construirColumCheck() {
+    let column = document.createElement('th');
+    let checkBox = document.createElement('input');
+    checkBox.setAttribute('type', 'checkbox');
+    column.appendChild(checkBox);
+    return column
+  }
+
+
+
+  _agregarEventos() {
+    this._$tbody.addEventListener('click', (e) => {
+      this._$tbody.querySelectorAll('tr.fila')
+        .forEach(($fila) => {
+          if ($fila.dataset.id === e.target.parentElement.dataset.id) {
+            this.selected = $fila.dataset.id;
+          }
+        })
+      this._$tbody.querySelectorAll('input[type="checkbox"]')
+        .forEach(($ipt) => {
+          $ipt.addEventListener('change', (e) => {
+            this.selected = e.target.dataset.id;
+          })
+        })
+    })
+  }
+
+  _construirFila(obj) {
+    const fila = document.createElement('tr');
+    fila.classList.add('fila');
+    this._columns.forEach(col => {
+      fila.dataset.id = obj['PIID'];
+      let td = document.createElement('td');
+      td.textContent = ((obj[col] === null || obj[col] === "") ? 'null' : obj[col]);
+      fila.appendChild(td);
+    })
+    fila.appendChild(this._construirTdCheck(obj["PIID"]));
+    return fila;
+  }
+
+  _construirTdCheck(id) {
+    let td = document.createElement('td');
+    let ipt = document.createElement('input');
+    ipt.setAttribute('type', 'checkbox');
+    ipt.dataset.id = id;
+    ipt.classList.add('check-row');
+    td.appendChild(ipt);
+    return td;
+  }
 
   disconnectedCallback() {
     console.log('Custom square element removed from page.');
