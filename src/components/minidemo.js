@@ -24,8 +24,8 @@ class TableComponent extends HTMLElement {
   }
 
   inicializarVariables() {
-    this._selected = '';
-    this.heading = '';
+    this.selected = null;
+    this.heading = null;
 
     this._data = [];
     this._columns = [];
@@ -33,6 +33,7 @@ class TableComponent extends HTMLElement {
     this._$heading = this._root.querySelector('.title');
     this._$thead = this._root.querySelector('thead');
     this._$tbody = this._root.querySelector('tbody');
+    this._$rowSelected = null;
   }
 
   construirElementosHTML() {
@@ -89,7 +90,7 @@ class TableComponent extends HTMLElement {
             color: #38383A;
         }
         .contenedor-componente {
-          
+
             font-family: Verdana, Geneva, Tahoma, sans-serif;
             display: flex;
             flex-direction: column;
@@ -144,11 +145,11 @@ class TableComponent extends HTMLElement {
             align-items: center;
             padding: 1em;
             color: var(--grey_thead);
-            /* 
+            /*
               border-bottom: solid 2px;
               width:100%;
             */
-            border-color: var(--grey_line); 
+            border-color: var(--grey_line);
         }
         .title {
             font-size: 2rem;
@@ -198,109 +199,96 @@ class TableComponent extends HTMLElement {
     `;
   }
 
-  set selected(index) {
-    const filas = this._root.querySelectorAll('tr.fila');
-    filas.forEach(fila => {
-      if (fila.dataset.id === index) {
-        this._selectFila(fila);
-        this._selected = index;
-        return
-      }
-      fila.classList.remove("selected");
-      fila.lastChild.firstElementChild.checked = false;
-    });
-  }
-
-  get selected() {
-    return this._selected;
-  }
-
-  _selectFila(fila) {
-    fila.classList.add('selected');
-    fila.lastChild.firstElementChild.checked = true;
-  }
-
   attributeChangedCallback() {
     this._render();
   }
 
   _render() {
-    this._$heading.textContent = this.heading || this.getAttribute('heading');
+    this.asignarTitulo();
 
-    if (this.data.length !== 0) {
-      this._columns = Object.keys(this.data[0]);
-      this._$thead.appendChild(this._construirThead());
-      this.data.forEach(dato => {
-        this._$tbody.appendChild(this._construirFila(dato));
-      })
-      this._agregarEventos();
+    if (this.data.length > 0) {
+      this._extraerColumnas();
+      this._construirEncabezado();
+      this._contruirCuerpo();
     }
   }
 
-  _construirThead() {
-    const trThead = document.createElement('tr');
-    trThead.classList.add('main-thead');
-    this._columns.forEach(p => {
-      trThead.appendChild(this._construirColumna(p));
-    });
-    trThead.appendChild(this._construirColumCheck());
-    return trThead;
+  asignarTitulo() {
+    this._$heading.textContent = this.heading || this.getAttribute('heading');
   }
 
-  _construirColumna(text) {
-    let column = document.createElement('th');
-    column.textContent = text;
-    return column;
+  _extraerColumnas() {
+    this._columns = Object.keys(this.data[0]);
   }
 
-  _construirColumCheck() {
-    let column = document.createElement('th');
-    let checkBox = document.createElement('input');
-    checkBox.setAttribute('type', 'checkbox');
-    column.appendChild(checkBox);
-    return column
+  _construirEncabezado() {
+    let htmlEncabezado = '<tr class="main-thead">';
+    htmlEncabezado += this._columns.reduce((anterior, columna) => anterior += `<th>${columna}</th>`, '');
+    htmlEncabezado += '<th></th></tr>';
+    this._$thead.innerHTML = htmlEncabezado;
   }
 
-
-
-  _agregarEventos() {
-    this._$tbody.addEventListener('click', (e) => {
-      this._$tbody.querySelectorAll('tr.fila')
-        .forEach(($fila) => {
-          if ($fila.dataset.id === e.target.parentElement.dataset.id) {
-            this.selected = $fila.dataset.id;
-          }
-        })
-      this._$tbody.querySelectorAll('input[type="checkbox"]')
-        .forEach(($ipt) => {
-          $ipt.addEventListener('change', (e) => {
-            this.selected = e.target.dataset.id;
-          })
-        })
-    })
+  _contruirCuerpo() {
+    this.data.forEach(dato => this._construirFila(dato));
   }
 
   _construirFila(obj) {
     const fila = document.createElement('tr');
-    fila.classList.add('fila');
-    this._columns.forEach(col => {
-      fila.dataset.id = obj['PIID'];
-      let td = document.createElement('td');
-      td.textContent = ((obj[col] === null || obj[col] === "") ? 'null' : obj[col]);
-      fila.appendChild(td);
-    })
-    fila.appendChild(this._construirTdCheck(obj["PIID"]));
-    return fila;
+    this._agregarClasesCss(fila);
+    this._insertarColumnasEnLaFila(fila, obj);
+    this._escucharEventos(fila, obj);
+    this._$tbody.appendChild(fila);
   }
 
-  _construirTdCheck(id) {
+  _agregarClasesCss(fila) {
+    fila.classList.add('fila');
+  }
+
+  _escucharEventos(fila, obj) {
+    fila.addEventListener('click', () => this._procesarClickFila(obj, fila));
+  }
+
+  _insertarColumnasEnLaFila(fila, obj) {
+    this._columns.forEach(col => this._insertarColumnaEnLaFila(fila, obj, col));
+    this._construirTdCheck(fila);
+  }
+
+  _construirTdCheck(fila) {
+    const celda = document.createElement('td');
+    const checkbox = document.createElement('input');
+    checkbox.setAttribute('type', 'checkbox');
+    checkbox.classList.add('check-row');
+    celda.appendChild(checkbox);
+    fila.appendChild(celda);
+  }
+
+  _insertarColumnaEnLaFila(fila, obj, col) {
     let td = document.createElement('td');
-    let ipt = document.createElement('input');
-    ipt.setAttribute('type', 'checkbox');
-    ipt.dataset.id = id;
-    ipt.classList.add('check-row');
-    td.appendChild(ipt);
-    return td;
+    td.textContent = this._obtenerValorObjeto(obj, col);
+    fila.appendChild(td);
+  }
+
+  _obtenerValorObjeto(objeto, propiedad) {
+    return ((objeto[propiedad] === null || objeto[propiedad] === "") ? 'null' : objeto[propiedad]);
+  }
+
+  _procesarClickFila(obj, fila) {
+    this.selected = obj["PIID"];
+    if (this._$rowSelected)
+      this._removerAtributosDeSeleccion();
+
+    this._$rowSelected = fila;
+    this._agregarAtributosDeSeleccion();
+  }
+
+  _agregarAtributosDeSeleccion() {
+    this._$rowSelected.classList.add('selected');
+    this._$rowSelected.querySelector('input[type="checkbox"]').checked = true;
+  }
+
+  _removerAtributosDeSeleccion() {
+    this._$rowSelected.classList.remove('selected');
+    this._$rowSelected.querySelector('input[type="checkbox"]').checked = false;
   }
 
   disconnectedCallback() {
