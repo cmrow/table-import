@@ -26,6 +26,7 @@ class TableComponent extends HTMLElement {
   inicializarVariables() {
     this.selected = null;
     this.heading = null;
+    this._idColumna = null;
 
     this._data = [];
     this._columns = [];
@@ -219,6 +220,7 @@ class TableComponent extends HTMLElement {
 
   _extraerColumnas() {
     this._columns = Object.keys(this.data[0]);
+    this._idColumna = this._columns[0];
   }
 
   _construirEncabezado() {
@@ -273,7 +275,7 @@ class TableComponent extends HTMLElement {
   }
 
   _procesarClickFila(obj, fila) {
-    this.selected = obj["PIID"];
+    this.selected = this._idColumna;
     if (this._$rowSelected)
       this._removerAtributosDeSeleccion();
 
