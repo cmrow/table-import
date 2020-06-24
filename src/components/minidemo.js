@@ -275,10 +275,9 @@ class TableComponent extends HTMLElement {
   }
 
   _procesarClickFila(obj, fila) {
-    this.selected = this._idColumna;
+    this.selected = obj[this._idColumna];
     if (this._$rowSelected)
       this._removerAtributosDeSeleccion();
-
     this._$rowSelected = fila;
     this._agregarAtributosDeSeleccion();
   }
