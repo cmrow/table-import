@@ -251,23 +251,9 @@ class TableComponent extends HTMLElement {
   }
 
   _insertarColumnasEnLaFila(fila, obj) {
-    this._columns.forEach(col => this._insertarColumnaEnLaFila(fila, obj, col));
-    this._construirTdCheck(fila);
-  }
-
-  _construirTdCheck(fila) {
-    const celda = document.createElement('td');
-    const checkbox = document.createElement('input');
-    checkbox.setAttribute('type', 'checkbox');
-    checkbox.classList.add('check-row');
-    celda.appendChild(checkbox);
-    fila.appendChild(celda);
-  }
-
-  _insertarColumnaEnLaFila(fila, obj, col) {
-    let td = document.createElement('td');
-    td.textContent = this._obtenerValorObjeto(obj, col);
-    fila.appendChild(td);
+    let columnas = this._columns.reduce((anterior, columna) => anterior += `<td>${this._obtenerValorObjeto(obj, columna)}</td>`, '');
+    columnas += '<td><input type="checkbox" class="check-row"></></td>';
+    fila.innerHTML = columnas;
   }
 
   _obtenerValorObjeto(objeto, propiedad) {

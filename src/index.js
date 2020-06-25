@@ -14,7 +14,7 @@ function createTable(title, data) {
   return tableComp;
 }
 
-const obtenerDatos = async function(url) {
+const obtenerDatos = async url => {
   const data = await fetch(url);
   return await data.json();
 }
