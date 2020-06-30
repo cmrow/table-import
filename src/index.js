@@ -1,7 +1,7 @@
 window.addEventListener('load', async () => {
   const divapp = document.getElementById('app');
   const tabla = document.getElementById('el2');
-  const data = await obtenerDatos('api/datos.json');
+  const data = await obtenerDatos('http://localhost:3003/importaciones');
   tabla.data = data;
   divapp.appendChild(createTable('Todas las importaciones', data));
 });

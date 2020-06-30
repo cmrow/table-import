@@ -1,0 +1,52 @@
+[
+    {
+        "PIID": "1",
+        "PIDesc": "Novedades Prima",
+        "PIDirectorio": "D:/WebClientes/SincoPlusASP/ArchivosCargados/importacionNovedades",
+        "PIProcValEstructura": null,
+        "PIProcValDatos": "[RRHH].[JRC_ImpValidaNovedadesPrima]",
+        "PIProcInsercion": "[RRHH].[JRC_ImpInsNovedadesPrima]",
+        "PIUrlFormato": "NovedadesContraPrima.xlsx"
+        
+    },
+    {
+        "PIID": "2",
+        "PIDesc": "Históricos Seguridad Social",
+        "PIDirectorio": "D:/WebClientes/SincoPlusASP/ArchivosCargados/ImportacionHistSS/",
+        "PIProcValEstructura": null,
+        "PIProcValDatos": "[RRHH].[JRC_ImpValidaHistoricosSegSoc]",
+        "PIProcInsercion": "[RRHH].[JRC_ImpInsHistoricosSegSoc]",
+        "PIUrlFormato": "HistoricosNovSegInt.xls"
+        
+    },
+    {
+        "PIID": "3",
+        "PIDesc": "Empleados",
+        "PIDirectorio": "D:/WebClientes/SincoPlusASP/ArchivosCargados/Empleados/",
+        "PIProcValEstructura": null,
+        "PIProcValDatos": null,
+        "PIProcInsercion": null,
+        "PIUrlFormato": null
+        
+    },
+    {
+        "PIID": "6",
+        "PIDesc": "Históricos Empleados Retirados",
+        "PIDirectorio": "D:/WebClientes/SincoPlusASP/ArchivosCargados/HistEmpRetirados",
+        "PIProcValEstructura": null,
+        "PIProcValDatos": null,
+        "PIProcInsercion": null,
+        "PIUrlFormato": null
+        
+    },
+    {
+        "PIID": "8",
+        "PIDesc": "Novedades de Nomina",
+        "PIDirectorio": "D:/WebClientes/SincoPlusASP/ERPNET/RRHH/Procesos/Importacion/Archivos/",
+        "PIProcValEstructura": null,
+        "PIProcValDatos": "[RRHH].[JRC_ImpValidaNovedadesGral]",
+        "PIProcInsercion": "[RRHH].[JRC_ImpInsNovedadesGral]",
+        "PIUrlFormato": "NOVEDADES"
+        
+    }
+]
