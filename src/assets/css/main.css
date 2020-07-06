@@ -21,6 +21,8 @@
 body{
     background-color: var(--bg_soft);
     max-width: 200%;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    margin: 1em;
 }
 .heading{
     padding: 1em;

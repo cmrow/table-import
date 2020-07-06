@@ -60,5 +60,48 @@
             "PIActiva": "0",
             "PIReversion": null
         }
+    ],
+    "auditorias":[
+        {
+            "id":"1",
+            "idImportacion":"1",
+            "usuario":"ususario 1",
+            "fecha":"Tue Jun 30 2020 14:41:18 GMT-0500",
+            "valorAnterior": "Creación",
+            "valorNuevo": "Edición"
+        },
+        {
+            "id":"2",
+            "idImportacion":"2",
+            "usuario":"ususario 2",
+            "fecha":"Tue Jun 30 2020 14:41:18 GMT-0500",
+            "valorAnterior": "Creación",
+            "valorNuevo": "Edición"
+        },
+        {
+            "id":"3",
+            "idImportacion":"3",
+            "usuario":"ususario 3",
+            "fecha":"Tue Jun 30 2020 14:41:18 GMT-0500",
+            "valorAnterior": "Creación",
+            "valorNuevo": "Edición"
+        },
+        {
+            "id":"4",
+            "idImportacion":"6",
+            "usuario":"ususario 4",
+            "fecha":"Tue Jun 30 2020 14:41:18 GMT-0500",
+            "valorAnterior": "Creación",
+            "valorNuevo": "Edición"
+        },
+        {
+            "id":"5",
+            "idImportacion":"8",
+            "usuario":"ususario 5",
+            "fecha":"Tue Jun 30 2020 14:41:18 GMT-0500",
+            "valorAnterior": "Creación",
+            "valorNuevo": "Edición"
+        }
     ]
+
 }

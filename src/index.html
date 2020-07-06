@@ -7,7 +7,8 @@
   <title>Mini Demo</title>
   <link rel="stylesheet" href="assets/css/main.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/webcomponentsjs/1.0.17/webcomponents-lite.js"></script>
-  <script src="components/minidemo.js"></script>
+  <script src="components/tabla.js"></script>
+  <script src="components/modal.js"></script>
   <script defer src="index.js"></script>
 </head>
 
@@ -15,12 +16,17 @@
   <header class="heading">
   </header>
   <div id="app">
-    <table-component id="el2" columna-id="PIID" heading="Todas las importacaiones">
+    <table-component id="el2" >
     </table-component>
+    <modal-component id="modal">
+    </modal-component>
+    <!-- <modal-component titulo="Auditorias" abierto="false" onclose="console.log('otro cerrado')" onopen="console.log('otro abierto')">
+      <p>hola mundo</p>
+    </modal-component> -->
   </div>
 
-  <table-component id="el12" columna-id="PIID" heading="Otra pinche tabla" data='[{"id":1,"nombre":"carlos"}]'>
-  </table-component>
+  <!-- <table-component id="el12" columna-id="PIID" heading="Otra pinche tabla" data='[{"id":1,"nombre":"carlos"}]'>
+  </table-component> -->
 
 </body>
 
